@@ -111,6 +111,14 @@ public class Order {
     }
 
     public void setQuantityToExecute(int quantity){
+        if(quantity == 0){
+            this.orderStatus = OrderStatus.EXECUTED;
+            this.timestampExecuted = Instant.now().toEpochMilli();
+        }
+        if(quantity>0)
+        {
+            this.orderStatus = OrderStatus.PARTEXECUTED;
+        }
         this.quantityToExecute = quantity;
     }
     public int getQuantityToExecute() {
