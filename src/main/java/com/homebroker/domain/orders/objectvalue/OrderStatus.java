@@ -4,7 +4,8 @@ public enum OrderStatus {
     REQUESTED,
     QUEUED,
     EXECUTED,
+    PARTEXECUTED,
     CANCELED,
+    CANCELEDPARTEXECUTED,
     REJECTED
-
 }

@@ -19,7 +19,7 @@ public class OrderBook {
 
         List<Transaction> transactions = new ArrayList<>();
         for (Order item : orders){
-            if(order.getQuantityExecuted() != order.getQuantity() && order.getPrice() >= item.getPrice()){
+            if(order.getQuantityToExecute() > 0 && order.getPrice() >= item.getPrice()){
 
                 int quantity = Math.min(order.getQuantity() - order.getQuantityExecuted(), item.getQuantity() -  item.getQuantityExecuted());
                 double price = item.getPrice();
@@ -41,15 +41,17 @@ public class OrderBook {
 
         List<Transaction> transactions = new ArrayList<>();
         for (Order item : orders){
-            if(order.getQuantityExecuted() != order.getQuantity() && order.getPrice() <= item.getPrice()){
+            if(order.getQuantityToExecute() > 0 && order.getPrice() <= item.getPrice()){
 
                 int quantity = Math.min(order.getQuantity() - order.getQuantityExecuted(), item.getQuantity() -  item.getQuantityExecuted());
                 double price = order.getPrice();
                 Transaction transaction = new Transaction(order.getOrderId(), item.getOrderId(), item.getWalletId(), order.getWalletId(), quantity, price);
 
                 order.setQuantityExecuted(order.getQuantityExecuted() + quantity);
+                order.setQuantityToExecute(quantity - order.getQuantityExecuted());
                 order.setQuantity(order.getQuantity() - quantity);
                 item.setQuantityExecuted(item.getQuantityExecuted() + quantity);
+                item.setQuantityToExecute(quantity - item.getQuantityExecuted());
                 item.setQuantity(order.getQuantity() - quantity);
 
                 transactions.add(transaction);

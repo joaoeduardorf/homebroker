@@ -15,6 +15,7 @@ public class Order {
     private int walletId;
     private int quantity;
     private int quantityExecuted;
+    private int quantityToExecute;
     private int price;
     private OrderType orderType;
     private OrderStatus orderStatus;
@@ -27,6 +28,7 @@ public class Order {
         this.orderId = UUID.randomUUID();
         this.walletId = walletId;
         this.quantity = quantity;
+        this.quantityToExecute = quantity;
         this.price = price;
         this.orderType = orderType;
         this.orderStatus = orderStatus;
@@ -89,18 +91,29 @@ public class Order {
     }
 
     public void setTimestampQueued(long timestampQueued) {
+        this.orderStatus = OrderStatus.QUEUED;
         this.timestampQueued = timestampQueued;
     }
 
     public void setTimestampExecuted(long timestampExecuted) {
+        this.orderStatus= OrderStatus.EXECUTED;
         this.timestampExecuted = timestampExecuted;
     }
 
     public void setTimestampCanceled(long timestampCanceled) {
+        this.orderStatus = OrderStatus.CANCELED;
         this.timestampCanceled = timestampCanceled;
     }
 
     public void setTimestampRejected(long timestampRejected) {
+        this.orderStatus = OrderStatus.REJECTED;
         this.timestampRejected = timestampRejected;
+    }
+
+    public void setQuantityToExecute(int quantity){
+        this.quantityToExecute = quantity;
+    }
+    public int getQuantityToExecute() {
+        return quantityToExecute;
     }
 }

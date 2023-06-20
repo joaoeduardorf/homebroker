@@ -34,13 +34,14 @@ public class OrderAppServiceImpl implements OrderAppService {
     @Override
     public OrderResponse AddBuyOrder(OrderRequest orderRequest) {
         Order order = OrderMapper.ToBuyOrder(orderRequest);
+
         order = ordersRepository.insert(order);
         List<Order> orders = ordersRepository.findAllSellOrdersSortByPriceAndTimestamp();
         order.setTimestampQueued(Instant.now().toEpochMilli());
         ordersRepository.save(order);
         OrderBook orderBook = new OrderBook(order, orders);
         List<Transaction> transactions = orderBook.executeBuyTrade();
-        if(transactions != null){
+        if(transactions != null && !transactions.isEmpty()){
             for (Transaction transaction : transactions) {
                 Wallet buyerWallet = walletRepository.findById(transaction.getBuyerWalletId()).orElse(null);
                 Wallet sellerWallet = walletRepository.findById(transaction.getSellerWalletId()).orElse(null);
@@ -50,6 +51,8 @@ public class OrderAppServiceImpl implements OrderAppService {
                 sellerWallet.SellOperation(transaction.getQuantity(), transaction.getPrice());
                 buyerOrder.setQuantityExecuted(buyerOrder.getQuantityExecuted() + transaction.getQuantity());
                 sellerOrder.setQuantityExecuted(sellerOrder.getQuantityExecuted() + transaction.getQuantity());
+                buyerOrder.setQuantityToExecute(buyerOrder.getQuantityToExecute() - transaction.getQuantity());
+                sellerOrder.setQuantityToExecute(sellerOrder.getQuantityToExecute() - transaction.getQuantity());
                 ordersRepository.save(buyerOrder);
                 ordersRepository.save(sellerOrder);
                 walletRepository.save(buyerWallet);
@@ -82,6 +85,8 @@ public class OrderAppServiceImpl implements OrderAppService {
                 sellerWallet.SellOperation(transaction.getQuantity(), transaction.getPrice());
                 buyerOrder.setQuantityExecuted(buyerOrder.getQuantityExecuted() + transaction.getQuantity());
                 sellerOrder.setQuantityExecuted(sellerOrder.getQuantityExecuted() + transaction.getQuantity());
+                buyerOrder.setQuantityToExecute(buyerOrder.getQuantityToExecute() - transaction.getQuantity());
+                sellerOrder.setQuantityToExecute(sellerOrder.getQuantityToExecute() - transaction.getQuantity());
                 ordersRepository.save(buyerOrder);
                 ordersRepository.save(sellerOrder);
                 walletRepository.save(buyerWallet);
