@@ -2,8 +2,8 @@ package com.homebroker;
 
 import com.homebroker.domain.wallets.Wallet;
 import com.homebroker.infra.orders.OrdersRepository;
-import com.homebroker.infra.orders.TransactionRepository;
-import com.homebroker.infra.orders.WalletRepository;
+import com.homebroker.infra.transactions.TransactionRepository;
+import com.homebroker.infra.wallets.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

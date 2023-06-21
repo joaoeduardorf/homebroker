@@ -1,7 +1,7 @@
 package com.homebroker.api;
 
 import com.homebroker.domain.ordersbook.Transaction;
-import com.homebroker.infra.orders.TransactionRepository;
+import com.homebroker.infra.transactions.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

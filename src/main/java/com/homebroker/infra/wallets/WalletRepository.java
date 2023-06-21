@@ -1,4 +1,4 @@
-package com.homebroker.infra.orders;
+package com.homebroker.infra.wallets;
 
 import com.homebroker.domain.wallets.Wallet;
 import org.springframework.data.mongodb.repository.MongoRepository;

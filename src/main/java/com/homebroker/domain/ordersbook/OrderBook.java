@@ -18,12 +18,12 @@ public class OrderBook {
         this.orders = orders;
         this.transactions = new ArrayList<>();
     }
-    public void executeSellTrade() {
+    public void executeTrade() {
         for (Order item : orders) {
-            if (order.getQuantityToExecute() > 0 && buyOrSellCondition(item.getPrice())) {
+            if (order.getQuantityToExecute() > 0 && buyOrSellCondition(item)) {
 
                 int quantity = Math.min(order.getQuantity() - order.getQuantityExecuted(), item.getQuantity() - item.getQuantityExecuted());
-                int price = getTradePrice(item.getPrice());
+                int price = getTradePrice(item);
 
                 Transaction transaction = createTransaction(item, quantity, price);
 
@@ -40,17 +40,17 @@ public class OrderBook {
         }
     }
 
-    private boolean buyOrSellCondition(int price){
+    private boolean buyOrSellCondition(Order orderByList){
         if(order.getOrderType() == OrderType.BUY){
-            return order.getPrice() >= price;
+            return order.getPrice() >= orderByList.getPrice();
         }else{
-            return order.getPrice() <= price;
+            return order.getPrice() <= orderByList.getPrice();
         }
     }
 
-    private int getTradePrice(int price){
+    private int getTradePrice(Order orderByList){
         if(order.getOrderType() == OrderType.BUY){
-            return price;
+            return orderByList.getPrice();
         }else{
             return order.getPrice();
         }

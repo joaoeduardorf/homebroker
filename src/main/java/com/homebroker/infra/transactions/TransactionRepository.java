@@ -1,4 +1,4 @@
-package com.homebroker.infra.orders;
+package com.homebroker.infra.transactions;
 
 import com.homebroker.domain.ordersbook.Transaction;
 import org.springframework.data.mongodb.repository.MongoRepository;

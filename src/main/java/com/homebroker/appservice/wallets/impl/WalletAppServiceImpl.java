@@ -1,9 +1,9 @@
 package com.homebroker.appservice.wallets.impl;
 
-import com.homebroker.appservice.wallets.responses.WalletResponse;
 import com.homebroker.appservice.wallets.interfaces.WalletAppService;
 import com.homebroker.appservice.wallets.mappers.WalletMapper;
-import com.homebroker.infra.orders.WalletRepository;
+import com.homebroker.appservice.wallets.responses.WalletResponse;
+import com.homebroker.infra.wallets.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

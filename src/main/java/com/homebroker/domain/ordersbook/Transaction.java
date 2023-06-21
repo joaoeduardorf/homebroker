@@ -3,6 +3,7 @@ package com.homebroker.domain.ordersbook;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
 import java.util.UUID;
 @Document(collection = "Transactions")
 public class Transaction {
@@ -26,6 +27,7 @@ public class Transaction {
         this.sellerWalletId = sellerWalletId;
         this.quantity = quantity;
         this.price = price;
+        this.timestamp = Instant.now().toEpochMilli();
     }
 
     public int getQuantity() {
