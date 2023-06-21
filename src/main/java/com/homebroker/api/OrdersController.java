@@ -1,7 +1,8 @@
 package com.homebroker.api;
 
 import com.homebroker.appservice.orders.interfaces.OrderAppService;
-import com.homebroker.appservice.orders.requests.OrderRequest;
+import com.homebroker.appservice.orders.requests.BuyOrderRequest;
+import com.homebroker.appservice.orders.requests.SellOrderRequest;
 import com.homebroker.appservice.orders.responses.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +23,13 @@ public class OrdersController {
     }
 
     @PostMapping("/buyorder")
-    OrderResponse buyOrder(@RequestBody OrderRequest buyOrderRequest){
-        return orderAppService.buyOrder(buyOrderRequest);
+    OrderResponse buyOrder(@RequestBody BuyOrderRequest buyOrderRequest){
+        return orderAppService.executeOrder(buyOrderRequest);
     }
 
     @PostMapping("/sellorder")
-    OrderResponse sellOrder(@RequestBody OrderRequest sellOrderRequest){
-        return orderAppService.sellOrder(sellOrderRequest);
+    OrderResponse sellOrder(@RequestBody SellOrderRequest sellOrderRequest){
+        return orderAppService.executeOrder(sellOrderRequest);
     }
 
     @GetMapping("/orders")

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface OrdersRepository extends MongoRepository<Order, UUID> {
     @Query(value = "{ orderType : 'BUY', quantityToExecute: { $gt: 0} }", sort = "{ 'price' : -1, 'timestampRequested' : 1 }")
-    List<Order> findAllBuyOrdersSortByPriceAndTimestamp();
+    List<Order> getBuyOrdersAvailable();
     @Query(value = "{ orderType: 'SELL', quantityToExecute: {$gt: 0}}", sort = "{ 'price' : 1, 'timestampRequested' : 1 }")
-    List<Order> findAllSellOrdersSortByPriceAndTimestamp();
+    List<Order> getSellOrdersAvailable();
 }

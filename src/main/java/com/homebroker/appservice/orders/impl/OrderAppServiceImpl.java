@@ -2,9 +2,13 @@ package com.homebroker.appservice.orders.impl;
 
 import com.homebroker.appservice.orders.interfaces.OrderAppService;
 import com.homebroker.appservice.orders.mappers.OrderMapper;
+import com.homebroker.appservice.orders.requests.BuyOrderRequest;
 import com.homebroker.appservice.orders.requests.OrderRequest;
+import com.homebroker.appservice.orders.requests.SellOrderRequest;
 import com.homebroker.appservice.orders.responses.OrderResponse;
 import com.homebroker.domain.orders.entities.Order;
+import com.homebroker.domain.orders.objectvalue.OrderStatus;
+import com.homebroker.domain.orders.objectvalue.OrderType;
 import com.homebroker.domain.ordersbook.OrderBook;
 import com.homebroker.domain.ordersbook.Transaction;
 import com.homebroker.domain.wallets.Wallet;
@@ -32,39 +36,61 @@ public class OrderAppServiceImpl implements OrderAppService {
     }
 
     @Override
-    public OrderResponse buyOrder(OrderRequest orderRequest) {
-        List<Order> orders = ordersRepository.findAllSellOrdersSortByPriceAndTimestamp();
+    public OrderResponse executeOrder(OrderRequest sellOrderRequest) {
 
-        Order order = OrderMapper.ToBuyOrder(orderRequest);
+        /**
+         * Ordem recebida
+         */
+        Order order = OrderMapper.ToOrder(sellOrderRequest);
         order = ordersRepository.insert(order);
-        order.setTimestampQueued(Instant.now().toEpochMilli());
+
+        /**
+         * Enfileira ou rejeita ordem
+         */
+        order.setQueuedOuRejectedOrder();
         ordersRepository.save(order);
+        /**
+         * Executa apenas se a nova ordem inserida for diferente de rejeitada
+         */
+        if(order.getOrderStatus() != OrderStatus.REJECTED) {
 
-        OrderBook orderBook = new OrderBook(order, orders);
-        orderBook.executeTrade();
-        List<Transaction> transactions = orderBook.getTransactions();
 
-        saveTradeInformaion(transactions);
+            /**
+             * Obtem fila de ordem disponivel
+             */
+            List<Order> orders = getOrdersEnqueued(order.getOrderType());
 
+            /**
+             * Cria livro de ordem
+             */
+            OrderBook orderBook = new OrderBook(order, orders);
+            /**
+             * Executa transacoes
+             */
+            orderBook.executeTrade();
+
+            /**
+             * Obtem as transacoes
+             */
+            List<Transaction> transactions = orderBook.getTransactions();
+
+            /**
+             * Sala as informacoes das transacoes executadas
+             */
+            saveTradeInformaion(transactions);
+        }
+
+        /**
+         * Mapea e retorna tipo response
+         */
         return OrderMapper.toOrderResponse(order);
     }
 
-    @Override
-    public OrderResponse sellOrder(OrderRequest orderRequest) {
-        List<Order> orders = ordersRepository.findAllBuyOrdersSortByPriceAndTimestamp();
-
-        Order order = OrderMapper.ToSellOrder(orderRequest);
-        order = ordersRepository.insert(order);
-
-        order.setTimestampQueued(Instant.now().toEpochMilli());
-        ordersRepository.save(order);
-        OrderBook orderBook = new OrderBook(order, orders);
-        orderBook.executeTrade();
-        List<Transaction> transactions = orderBook.getTransactions();
-
-        saveTradeInformaion(transactions);
-
-        return OrderMapper.toOrderResponse(order);
+    private List<Order> getOrdersEnqueued(OrderType orderType) {
+        if(orderType == OrderType.BUY)
+            return ordersRepository.getSellOrdersAvailable();
+        else
+            return ordersRepository.getBuyOrdersAvailable();
     }
 
     @Override

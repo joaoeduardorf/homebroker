@@ -1,5 +1,7 @@
 package com.homebroker.domain.ordersbook;
 
+import com.homebroker.domain.orders.entities.Order;
+import com.homebroker.domain.orders.objectvalue.OrderType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,7 +21,7 @@ public class Transaction {
     private long timestamp;
 
     public Transaction(){}
-    public Transaction(UUID buyerOrderId, UUID sellerOrderId,int buyerWalletId, int sellerWalletId, int quantity, double price) {
+    private Transaction(UUID buyerOrderId, UUID sellerOrderId,int buyerWalletId, int sellerWalletId, int quantity, double price) {
         this.transactionId = UUID.randomUUID();
         this.buyerOrderId = buyerOrderId;
         this.sellerOrderId = sellerOrderId;
@@ -29,7 +31,6 @@ public class Transaction {
         this.price = price;
         this.timestamp = Instant.now().toEpochMilli();
     }
-
     public int getQuantity() {
         return quantity;
     }
@@ -52,5 +53,13 @@ public class Transaction {
 
     public UUID getSellerOrderId() {
         return sellerOrderId;
+    }
+
+    public static Transaction createTransaction(Order order, Order orderByList, int quantity) {
+        if (order.getOrderType() == OrderType.BUY) {
+            return new Transaction(order.getOrderId(), orderByList.getOrderId(), order.getWalletId(), orderByList.getWalletId(), quantity, orderByList.getPrice());
+        } else {
+            return  new Transaction(orderByList.getOrderId(), order.getOrderId(), orderByList.getWalletId(), order.getWalletId(), quantity, order.getPrice());
+        }
     }
 }

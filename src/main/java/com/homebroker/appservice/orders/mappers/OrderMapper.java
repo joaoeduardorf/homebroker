@@ -1,5 +1,6 @@
 package com.homebroker.appservice.orders.mappers;
 
+import com.homebroker.appservice.orders.requests.BuyOrderRequest;
 import com.homebroker.appservice.orders.requests.OrderRequest;
 import com.homebroker.appservice.orders.responses.OrderResponse;
 import com.homebroker.domain.orders.entities.Order;
@@ -10,12 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderMapper {
-    public static Order ToBuyOrder(OrderRequest orderRequest){
-        return new Order(orderRequest.walletId ,orderRequest.quantity, orderRequest.price, OrderType.BUY, OrderStatus.REQUESTED);
-    }
-
-    public static Order ToSellOrder(OrderRequest orderRequest){
-        return new Order(orderRequest.walletId, orderRequest.quantity, orderRequest.price, OrderType.SELL, OrderStatus.REQUESTED);
+    public static Order ToOrder(OrderRequest orderRequest){
+        return new Order(orderRequest.walletId, orderRequest.quantity, orderRequest.price, orderRequest.orderType, orderRequest.orderStatus);
     }
 
     public static OrderResponse toOrderResponse(Order order){

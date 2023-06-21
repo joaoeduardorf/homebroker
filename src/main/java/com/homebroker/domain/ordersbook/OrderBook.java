@@ -23,21 +23,22 @@ public class OrderBook {
             if (order.getQuantityToExecute() > 0 && buyOrSellCondition(item)) {
 
                 int quantity = Math.min(order.getQuantity() - order.getQuantityExecuted(), item.getQuantity() - item.getQuantityExecuted());
-                int price = getTradePrice(item);
 
-                Transaction transaction = createTransaction(item, quantity, price);
+                Transaction transaction = Transaction.createTransaction(order, item, quantity);
 
-                order.setQuantityExecuted(order.getQuantityExecuted() + quantity);
-                order.setQuantityToExecute(order.getQuantityToExecute() - quantity);
-
-                item.setQuantityExecuted(item.getQuantityExecuted() + quantity);
-                item.setQuantityToExecute(item.getQuantityToExecute() - quantity);
+                updateQuantityOrderAfterTransaction(order, quantity);
+                updateQuantityOrderAfterTransaction(item, quantity);
 
                 this.transactions.add(transaction);
             } else {
                 break;
             }
         }
+    }
+
+    private void updateQuantityOrderAfterTransaction(Order order, int quantity) {
+        order.setQuantityExecuted(order.getQuantityExecuted() + quantity);
+        order.setQuantityToExecute(order.getQuantityToExecute() - quantity);
     }
 
     private boolean buyOrSellCondition(Order orderByList){
@@ -48,21 +49,6 @@ public class OrderBook {
         }
     }
 
-    private int getTradePrice(Order orderByList){
-        if(order.getOrderType() == OrderType.BUY){
-            return orderByList.getPrice();
-        }else{
-            return order.getPrice();
-        }
-    }
-
-    private Transaction createTransaction(Order orderByList, int quantity, int price) {
-        if (order.getOrderType() == OrderType.BUY) {
-            return new Transaction(order.getOrderId(), orderByList.getOrderId(), order.getWalletId(), orderByList.getWalletId(), quantity, price);
-        } else {
-            return  new Transaction(orderByList.getOrderId(), order.getOrderId(), orderByList.getWalletId(), order.getWalletId(), quantity, price);
-        }
-    }
 
     public List<Transaction> getTransactions(){
         return transactions;

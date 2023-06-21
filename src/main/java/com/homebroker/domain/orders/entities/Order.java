@@ -124,4 +124,12 @@ public class Order {
     public int getQuantityToExecute() {
         return quantityToExecute;
     }
+
+    public void setQueuedOuRejectedOrder(){
+        if(this.getQuantity()<=0 || this.getPrice() <=0){
+            this.setTimestampRejected(Instant.now().toEpochMilli());
+        }else{
+            this.setTimestampQueued(Instant.now().toEpochMilli());
+        }
+    }
 }
