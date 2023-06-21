@@ -3,8 +3,6 @@ package com.homebroker.domain.wallets;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Document(collection = "Wallets")
 public class Wallet {
 
@@ -18,12 +16,12 @@ public class Wallet {
         this.balance = balance;
     }
 
-    public void BuyOperation(int quantity, double value){
+    public void buyOperation(int quantity, double value){
         this.quantity +=quantity;
         this.balance -= value * quantity;
     }
 
-    public void SellOperation(int quantity, double value){
+    public void sellOperation(int quantity, double value){
         this.quantity -= quantity;
         this.balance += value * quantity;
     }

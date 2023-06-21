@@ -81,8 +81,8 @@ public class OrderAppServiceImpl implements OrderAppService {
             for (Transaction transaction : transactions) {
                 Wallet buyerWallet = walletRepository.findById(transaction.getBuyerWalletId()).orElse(null);
                 Wallet sellerWallet = walletRepository.findById(transaction.getSellerWalletId()).orElse(null);
-                buyerWallet.BuyOperation(transaction.getQuantity(), transaction.getPrice());
-                sellerWallet.SellOperation(transaction.getQuantity(), transaction.getPrice());
+                buyerWallet.buyOperation(transaction.getQuantity(), transaction.getPrice());
+                sellerWallet.sellOperation(transaction.getQuantity(), transaction.getPrice());
                 walletRepository.save(buyerWallet);
                 walletRepository.save(sellerWallet);
 

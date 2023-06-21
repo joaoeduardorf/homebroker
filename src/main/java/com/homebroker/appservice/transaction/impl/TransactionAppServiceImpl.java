@@ -28,8 +28,8 @@ public class TransactionAppServiceImpl implements TransactionAppService {
             Wallet sellerWallet = walletRepository.findById(transaction.getSellerWalletId()).orElse(null);
             Order buyerOrder = ordersRepository.findById(transaction.getBuyerOrderId()).orElse(null);
             Order sellerOrder = ordersRepository.findById(transaction.getSellerOrderId()).orElse(null);
-            buyerWallet.BuyOperation(transaction.getQuantity(), transaction.getPrice());
-            sellerWallet.SellOperation(transaction.getQuantity(), transaction.getPrice());
+            buyerWallet.buyOperation(transaction.getQuantity(), transaction.getPrice());
+            sellerWallet.sellOperation(transaction.getQuantity(), transaction.getPrice());
             buyerOrder.setQuantityExecuted(buyerOrder.getQuantityExecuted() + transaction.getQuantity());
             sellerOrder.setQuantityExecuted(sellerOrder.getQuantityExecuted() + transaction.getQuantity());
             buyerOrder.setQuantityToExecute(buyerOrder.getQuantityToExecute() - transaction.getQuantity());
