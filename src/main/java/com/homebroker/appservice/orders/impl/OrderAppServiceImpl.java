@@ -17,6 +17,7 @@ import com.homebroker.infra.transactions.TransactionRepository;
 import com.homebroker.infra.wallets.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -101,7 +102,8 @@ public class OrderAppServiceImpl implements OrderAppService {
         return orderResponses;
     }
 
-    void saveTradeInformaion(List<Transaction> transactions)
+    @Transactional
+    public void saveTradeInformaion(List<Transaction> transactions)
     {
         if(!transactions.isEmpty()){
             for (Transaction transaction : transactions) {
