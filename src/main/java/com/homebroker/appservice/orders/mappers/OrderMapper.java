@@ -18,14 +18,17 @@ public class OrderMapper {
         return new Order(orderRequest.walletId, orderRequest.quantity, orderRequest.price, OrderType.SELL, OrderStatus.REQUESTED);
     }
 
-    public static OrderResponse ToOrderResponse(Order order){
-        return new  OrderResponse(order.getOrderId(), order.getWalletId(), order.getQuantity(), order.getPrice(),order.getOrderType(), order.getOrderStatus(),order.getTimestampRequested());
+    public static OrderResponse toOrderResponse(Order order){
+        OrderResponse orderResponse = new OrderResponse(order.getOrderId(), order.getWalletId(), order.getQuantity(), order.getPrice(),order.getOrderType(), order.getOrderStatus(),order.getTimestampRequested());
+        return orderResponse;
     }
 
-    public static List<OrderResponse> ToOrderResponse(List<Order> orders){
+    public static List<OrderResponse> toOrderResponse(List<Order> orders){
         List<OrderResponse> orderResponses = new ArrayList<>();
-        for (Order order: orders) {
-           orderResponses.add(new  OrderResponse(order.getOrderId(), order.getWalletId(), order.getQuantity(), order.getPrice(),order.getOrderType(), order.getOrderStatus(),order.getTimestampRequested()));
+        if(orders != null) {
+            for (Order order : orders) {
+                orderResponses.add(new OrderResponse(order.getOrderId(), order.getWalletId(), order.getQuantity(), order.getPrice(), order.getOrderType(), order.getOrderStatus(), order.getTimestampRequested()));
+            }
         }
         return orderResponses;
     }

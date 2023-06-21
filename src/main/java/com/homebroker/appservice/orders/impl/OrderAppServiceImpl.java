@@ -32,16 +32,17 @@ public class OrderAppServiceImpl implements OrderAppService {
     }
 
     @Override
-    public OrderResponse AddBuyOrder(OrderRequest orderRequest) {
+    public OrderResponse buyOrder(OrderRequest orderRequest) {
         Order order = OrderMapper.ToBuyOrder(orderRequest);
-
         order = ordersRepository.insert(order);
         List<Order> orders = ordersRepository.findAllSellOrdersSortByPriceAndTimestamp();
         order.setTimestampQueued(Instant.now().toEpochMilli());
         ordersRepository.save(order);
         OrderBook orderBook = new OrderBook(order, orders);
-        List<Transaction> transactions = orderBook.executeBuyTrade();
-        if(transactions != null && !transactions.isEmpty()){
+        orderBook.executeSellTrade();
+        List<Transaction> transactions = orderBook.getTransactions();
+
+        if(!transactions.isEmpty()){
             for (Transaction transaction : transactions) {
                 Wallet buyerWallet = walletRepository.findById(transaction.getBuyerWalletId()).orElse(null);
                 Wallet sellerWallet = walletRepository.findById(transaction.getSellerWalletId()).orElse(null);
@@ -60,22 +61,23 @@ public class OrderAppServiceImpl implements OrderAppService {
             }
             transactionRepository.insert(transactions);
         }
-        return OrderMapper.ToOrderResponse(order);
+        return OrderMapper.toOrderResponse(order);
 
 
     }
 
     @Override
-    public OrderResponse AddSellOrder(OrderRequest orderRequest) {
+    public OrderResponse sellOrder(OrderRequest orderRequest) {
         Order order = OrderMapper.ToSellOrder(orderRequest);
         order = ordersRepository.insert(order);
         List<Order> orders = ordersRepository.findAllBuyOrdersSortByPriceAndTimestamp();
         order.setTimestampQueued(Instant.now().toEpochMilli());
         ordersRepository.save(order);
         OrderBook orderBook = new OrderBook(order, orders);
-        List<Transaction> transactions = orderBook.executeSellTrade();
+        orderBook.executeSellTrade();
+        List<Transaction> transactions = orderBook.getTransactions();
 
-        if(transactions != null){
+        if(!transactions.isEmpty()){
             for (Transaction transaction : transactions) {
                 Wallet buyerWallet = walletRepository.findById(transaction.getBuyerWalletId()).orElse(null);
                 Wallet sellerWallet = walletRepository.findById(transaction.getSellerWalletId()).orElse(null);
@@ -95,13 +97,13 @@ public class OrderAppServiceImpl implements OrderAppService {
             transactionRepository.insert(transactions);
         }
 
-        return OrderMapper.ToOrderResponse(order);
+        return OrderMapper.toOrderResponse(order);
     }
 
     @Override
-    public List<OrderResponse> GetHistory() {
+    public List<OrderResponse> getHistory() {
         List<Order> orders =  ordersRepository.findAll();
-        List<OrderResponse> orderResponses = OrderMapper.ToOrderResponse(orders);
+        List<OrderResponse> orderResponses = OrderMapper.toOrderResponse(orders);
 
         return orderResponses;
     }

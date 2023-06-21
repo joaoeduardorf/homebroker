@@ -1,6 +1,6 @@
 package com.homebroker.appservice.wallets.interfaces;
 
-import com.homebroker.appservice.wallets.Responses.WalletResponse;
+import com.homebroker.appservice.wallets.responses.WalletResponse;
 
 import java.util.List;
 

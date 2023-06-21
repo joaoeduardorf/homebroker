@@ -1,4 +1,4 @@
-package com.homebroker.appservice.wallets.Responses;
+package com.homebroker.appservice.wallets.responses;
 
 public class WalletResponse {
     private int walletId;
@@ -9,17 +9,6 @@ public class WalletResponse {
         this.quantity = quantity;
         this.balance = balance;
     }
-
-    public void BuyOperation(int quantity, double value){
-        quantity +=quantity;
-        balance -= value;
-    }
-
-    public void SellOperation(int quantity, double value){
-        quantity -= quantity;
-        balance += value;
-    }
-
     public int getWalletId() {
         return walletId;
     }

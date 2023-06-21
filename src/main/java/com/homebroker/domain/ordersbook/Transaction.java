@@ -17,6 +17,7 @@ public class Transaction {
     private double price;
     private long timestamp;
 
+    public Transaction(){}
     public Transaction(UUID buyerOrderId, UUID sellerOrderId,int buyerWalletId, int sellerWalletId, int quantity, double price) {
         this.transactionId = UUID.randomUUID();
         this.buyerOrderId = buyerOrderId;
