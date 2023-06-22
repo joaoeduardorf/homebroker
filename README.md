@@ -4,9 +4,9 @@
 
 Para o funcionamento do projeto será necessário.
 
-| Java 1.8+ |
-| Gradle 3+ |
-| Mongo 4.0 |
+| Java 20 |
+| Gradle 7 |
+| Mongo 6.0 |
 
 ##### Mongo
 
@@ -54,6 +54,10 @@ gradlew.bat bootRun
 O proejeto com com uma pasta na raíz chamada postman, essa pasta contem um projeto do Postman contendo as principais requisições dispoiníveis para ser executada.
 
 ## Teste de carga
- A execução do teste de carga pode ser feita rodando o script de teste na pasta jmeter do projeto, essa pasta contem um arquivo do JMeter e um csv com uma massa de dados.
+
+A execução do teste de carga pode ser feita rodando o script de teste na pasta jmeter do projeto, essa pasta contem um arquivo do JMeter e um csv com uma massa de dados.
  
+## Documento Draw.io
+
+O projeto conta com um documento draw.io onde contém uma estruturação de um projeto mais complexo e escalável, além da documentação das classes
 
