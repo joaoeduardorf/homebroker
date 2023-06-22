@@ -61,3 +61,7 @@ A execução do teste de carga pode ser feita rodando o script de teste na pasta
 
 O projeto conta com um documento draw.io onde contém uma estruturação de um projeto mais complexo e escalável, além da documentação das classes
 
+## Evolução e ganho de escalabilidade
+
+A entrega desse MVP levou em consideração a possibildade de evlução do projeto e ganho de escalabilidade segmentando as funcionlidades de order, orderbook e wallet, onde a order seria uma api rest com regras simples de validação do input de dados e comunicação com um broker de fila mensageria como Kafka ou RabitMQ por exemplo, o orderbook responsável pelos trades seria segmentado como um consumer dos tópicos da mensageria e existira um consumer para atulizar informações de status de order e valores na wallet.
+
